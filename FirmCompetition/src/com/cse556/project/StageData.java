@@ -1,6 +1,7 @@
 package com.cse556.project;
 
-public class StageData {
+
+public class StageData{
 	private double invest_Inno = 0;			//innovation invest
 	private double invest_Qual = 0;         //quality invest 
 	private double investment = 0;			//total invest
@@ -8,13 +9,47 @@ public class StageData {
 	private double index_Ht = 0;       //high-tech index
 	private double techAd = 0;         //advance of tech index per year.
 	private double index_Ex = 0;     //experience index
-	
+	private double exAd = 0;  //advance of experience index
+	private double brandComp = 0; //competitiveness of the firm
+
 	private double prod_price = 0;				//product price
 	private double prod_cost = 0;				//product cost
 	
-	private int sellVol = 0;				//product sales volume
+	private double sellVol = 0;				//product sales volume
 	private double profit = 0;				//final profit
 	private int stage = 0;
+	
+	public void resetData(){
+		this.invest_Inno = 0;
+		this.invest_Qual = 0;
+		this.investment = 0;
+		this.index_Ht = 0;
+		this.index_Ex = 0;
+		this.techAd = 0;
+		this.prod_price = 0;
+		this.prod_cost = 0;
+		this.sellVol = 0;
+		this.profit = 0;
+		this.stage = 0;
+		this.exAd = 0;
+	}
+	
+	public double getExAd() {
+		return exAd;
+	}
+
+
+	public void setExAd(double exAd) {
+		this.exAd = exAd;
+	}
+	
+	public double getBrandComp() {
+		return brandComp;
+	}
+
+	public void setBrandComp(double brandComp) {
+		this.brandComp = brandComp;
+	}
 	
 	public double getInvest_Inno() {
 		return invest_Inno;
@@ -64,10 +99,10 @@ public class StageData {
 	public void setProd_cost(double prod_cost) {
 		this.prod_cost = prod_cost;
 	}
-	public int getSellVol() {
+	public double getSellVol() {
 		return sellVol;
 	}
-	public void setSellVol(int sellVol) {
+	public void setSellVol(double sellVol) {
 		this.sellVol = sellVol;
 	}
 	public double getProfit() {
