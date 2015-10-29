@@ -17,8 +17,8 @@ public class TimeMachine {
 		/*Init the firms*/
 		firms = new ArrayList<Firm>();
 		firms.add(new Firm("jpelectronic", this));	
-		firms.add(new Firm("tommycomputer", this));
-		firms.add(new Firm("auspyfact", this));
+		firms.add(new Firm("tommyinnovation", this));
+		firms.add(new Firm("auspyindustry", this));
 		firms.add(new Firm("haisenit", this));
 		/*Init the Market*/
 		market = new Market(stage);

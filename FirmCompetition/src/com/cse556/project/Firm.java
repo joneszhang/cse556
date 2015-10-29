@@ -25,15 +25,16 @@ public class Firm {
 		initData.setIndex_Ex(i_ex);
 		initData.setInvestment(i_invest);
 		annual_Data.put(currentStage, initData);
+		this.currentData = initData;
 	}
 	
 	public void makePrepare(int stg){
-		currentData = new StageData();//set the data for new stage
-		this.currentStage = stg;
-		currentData.setStage(this.currentStage);//set the stage of data
 		
 		if(0 == currentStage)//for the beginning, no preparation need to be done.
 			return;
+		currentData = new StageData();//set the data for new stage
+		this.currentStage = stg;
+		currentData.setStage(this.currentStage);//set the stage of data
 		//calculate the progress in tech index and the current index of Tech index
 		double ti = annual_Data.get(currentStage - 1).getTechAd() 
 				+ annual_Data.get(this.currentStage - 1).getIndex_Ht();
