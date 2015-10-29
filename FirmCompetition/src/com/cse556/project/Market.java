@@ -4,6 +4,20 @@ public class Market {
 	private double volume; //annual market volume
 	private double annual_growth; //the total anual growth of volume
 	private double stableRate;  //the natural increasing rate of volume
+	private double currentStage; //current stage
+	
+	public Market(int stg){
+		currentStage = stg;
+	}
+	
+	public double getCurrentStage() {
+		return currentStage;
+	}
+
+	public void setCurrentStage(double currentStage) {
+		this.currentStage = currentStage;
+	}
+
 	public double getVolume() {
 		return volume;
 	}
