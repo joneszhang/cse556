@@ -42,7 +42,7 @@ public class TimeMachine {
 			//make market naturally increase
 			market.naturalIncrease(stage);
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
-				firms.get(i).makePrepare(stage);;//every firm make decision for this stage
+				firms.get(i).makePrepare(stage);//every firm make decision for this stage
 			}
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
 				firms.get(i).makeDecision();//every firm make decision for this stage
@@ -96,31 +96,30 @@ public class TimeMachine {
 	
 	public double getExpectation(String index){//calculate the expectations of data
 		double expectation = 0;
-		switch(index){
-		case "hti":
+		if(index.equals("hti")){
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
 				expectation += firms.get(cnt).firmData().getIndex_Ht();
 			}
 			expectation /= firms.size();
-			break;
-		case "exi":
+		}
+		else if(index.equals("exi")){
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
 				expectation += firms.get(cnt).firmData().getIndex_Ex();
 			}
 			expectation /= firms.size();
-			break;
-		case "price":
+		}
+		else if(index.equals("price")){
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
 				expectation += firms.get(cnt).firmData().getProd_price();
 			}
 			expectation /= firms.size();
-			break;
 		}
 		return expectation;
 		
 	}
 	public static void main(String[] args) {//main process function
 		TimeMachine machine = new TimeMachine();
+		machine.initGame();
 		machine.competitionModeling(1);
 	}
 }

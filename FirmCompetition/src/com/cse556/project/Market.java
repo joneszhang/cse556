@@ -30,7 +30,7 @@ public class Market {
 	
 	public void naturalIncrease(int stg){
 		currentStage = stg;
-		currentVolume = basevolume * Math.pow(stableRate, currentStage);
+		currentVolume = basevolume * Math.pow(stableRate, currentStage);//有问题
 	}
 	
 	public void finalAnnualVolume(double v){
