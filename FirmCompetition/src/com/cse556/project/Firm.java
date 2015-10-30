@@ -32,6 +32,8 @@ public class Firm {
 		
 		if(0 == currentStage)//for the beginning, no preparation need to be done.
 			return;
+		//set the investment amount
+		currentData.setInvestment(annual_Data.get(this.currentStage - 1).getProfit());
 		currentData = new StageData();//set the data for new stage
 		this.currentStage = stg;
 		currentData.setStage(this.currentStage);//set the stage of data
@@ -44,22 +46,13 @@ public class Firm {
 				+ annual_Data.get(this.currentStage - 1).getIndex_Ht();
 		currentData.setIndex_Ht(ex);
 		
-		//calculate the productive cost of this stage
-		currentData.setProd_cost(informer.factory.produceCost(ti));
-		
-		//calculate the increase in sell volume due to dech increase
-		double addsell = informer.market.getCurrentVolume() * 0.005 
-				* annual_Data.get(currentStage - 1).getTechAd() ;
-		currentData.setSellVol(addsell);
-		
 	}
 	
 	public void makeDecision(){// set the data for every stage
 		
-		if(0 == currentStage)
-			return;
 		currentData.setStage(currentStage);
-		double profit_lastyear = annual_Data.get(this.currentStage - 1).getProfit();
+		
+		double profit_lastyear = currentData.getInvestment();
 		//decide investment on high tech
 		currentData.setInvest_Inno(profit_lastyear * 0.6);
 		//decide investment on experience
@@ -68,6 +61,13 @@ public class Firm {
 		//decide the price of this stage.
 		currentData.setProd_price(8000);
 		
+		//calculate the productive cost of this stage
+		currentData.setProd_cost(informer.factory.produceCost(currentData.getIndex_Ht()));
+		
+		//calculate the increase in sell volume due to dech increase
+		double addsell = (currentStage > 0)?informer.market.getCurrentVolume() * 0.005 
+				* annual_Data.get(currentStage - 1).getTechAd() : 0;
+		currentData.setSellVol(addsell);
 	}
 	
 	
@@ -76,6 +76,16 @@ public class Firm {
 	}
 	
 	public boolean stageRecord(){//record the result for every stage
+		double prof = (currentData.getProd_price() - currentData.getProd_cost())
+				* currentData.getSellVol() - currentData.getInvestment();
+		currentData.setSellVol(prof);
+		
+		//record the advance in tech
+		double ti_add = this.currentData.getInvest_Inno()/this.currentData.getInvest_Inno();
+		this.currentData.setTechAd(ti_add);
+		//record the advance in experience
+		double ex_add = this.currentData.getInvest_Qual() /this.currentData.getInvest_Qual() ;
+		this.currentData.setExAd(ex_add);
 		return true;
 	}
 	

@@ -120,6 +120,6 @@ public class TimeMachine {
 	public static void main(String[] args) {//main process function
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
-		machine.competitionModeling(1);
+		machine.competitionModeling(2);
 	}
 }
