@@ -19,7 +19,7 @@ public class Firm {
 	
 	public void initiate(int stg, double i_tech, double i_ex, double i_invest){
 		annual_Data = new HashMap<Integer, StageData>();
-		StageData initData = new StageData();
+		StageData initData = new StageData(firmName);
 		initData.setStage(stg);
 		initData.setIndex_Ht(i_tech);
 		initData.setIndex_Ex(i_ex);
@@ -34,7 +34,7 @@ public class Firm {
 			return;
 		//set the investment amount
 		currentData.setInvestment(annual_Data.get(this.currentStage - 1).getProfit());
-		currentData = new StageData();//set the data for new stage
+		currentData = new StageData(firmName);//set the data for new stage
 		this.currentStage = stg;
 		currentData.setStage(this.currentStage);//set the stage of data
 		//calculate the progress in tech index and the current index of Tech index

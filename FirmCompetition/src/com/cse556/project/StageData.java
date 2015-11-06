@@ -18,6 +18,7 @@ public class StageData{
 	private double sellVol = 0;				//product sales volume
 	private double profit = 0;				//final profit
 	private int stage = 0;
+	private String firmName = null;
 	
 	public void resetData(){
 		this.invest_Inno = 0;
@@ -34,6 +35,18 @@ public class StageData{
 		this.exAd = 0;
 	}
 	
+	public StageData(String name){
+		this.firmName = name;
+	}
+	
+	public String getFirmName() {
+		return firmName;
+	}
+
+	public void setFirmName(String firmName) {
+		this.firmName = firmName;
+	}
+
 	public double getExAd() {
 		return exAd;
 	}

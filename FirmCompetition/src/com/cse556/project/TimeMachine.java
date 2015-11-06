@@ -41,6 +41,7 @@ public class TimeMachine {
 			stage = i;
 			//make market naturally increase
 			market.naturalIncrease(stage);
+			factory.stageRenew(stage);
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
 				firms.get(i).makePrepare(stage);//every firm make decision for this stage
 			}
