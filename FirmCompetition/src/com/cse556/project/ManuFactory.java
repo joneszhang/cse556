@@ -5,14 +5,15 @@ public class ManuFactory {
 	private int currentStage;
 	private double baseCost;
 	//constant parameters of formulas
-	private double k = 1;
-	private double d = 1;
-	private double p = 1;
-	private double c = 1;
-	private double a = 1;
-	private double b = 1;
+	private double k = 20000;
+	private double d = 20;
+	private double p = 100;
+	private double c = 1.5;
+	private double a = 8;
+	private double b = 0.4;
 	private double m = 1;
-	
+	private double e = 500;
+
 	public ManuFactory(int stg){
 		currentStage = stg;
 		baseCost = 5000;
@@ -31,7 +32,7 @@ public class ManuFactory {
 	public void stageRenew(int stg){
 		currentStage = stg;
 		this.produceTech = p / (1+ Math.pow(c, (a - b*currentStage)));
-		this.baseCost = k / (this.produceTech + d) + Math.E;
+		this.baseCost = k / (this.produceTech + d) + e;
 	}
 	
 	
@@ -52,6 +53,14 @@ public class ManuFactory {
 
 	public void setProduceTech(double produceTech) {
 		this.produceTech = produceTech;
+	}
+
+	public double getBaseCost() {
+		return baseCost;
+	}
+
+	public void setBaseCost(double baseCost) {
+		this.baseCost = baseCost;
 	}
 	
 }

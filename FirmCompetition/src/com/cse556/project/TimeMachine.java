@@ -122,5 +122,14 @@ public class TimeMachine {
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
 		machine.competitionModeling(2);
+		/*for(int i=0;i<=50;i++)
+		{
+			ManuFactory mf = new ManuFactory(i);
+			mf.stageRenew(i);
+			System.out.println("**************************" + i + "**************************");
+			System.out.println("produce_index = " + mf.getProduceTech());
+			System.out.println("basecost = " + mf.getBaseCost());
+		}
+		*/
 	}
 }
