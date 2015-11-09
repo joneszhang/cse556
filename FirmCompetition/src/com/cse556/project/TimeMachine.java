@@ -12,24 +12,21 @@ public class TimeMachine {
 	public Market market;
 	public ManuFactory factory;
 	
+	
 	public TimeMachine(){
 		
 		/*Init the firms*/
 		firms = new ArrayList<Firm>();
 		firms.add(new Firm("jpelectronic", this));	
 		firms.add(new Firm("tommyinnovation", this));
-		firms.add(new Firm("auspyindustry", this));
-		firms.add(new Firm("haisenit", this));
 		/*Init the Market*/
 		market = new Market(stage);
 		factory = new ManuFactory(stage);
 	}
 	
 	public void initGame(){
-		firms.get(0).initiate(0, 6, 4, 2000);
-		firms.get(1).initiate(0, 5, 5, 2000);
-		firms.get(2).initiate(0, 2, 8, 2000);
-		firms.get(3).initiate(0, 7, 3, 2000);
+		firms.get(0).initiate(0, 3, 2, 20);
+		firms.get(1).initiate(0, 2, 2, 20);
 	}
 	
 	public void annualTrade(int stg){
@@ -43,84 +40,84 @@ public class TimeMachine {
 			market.naturalIncrease(stage);
 			factory.stageRenew(stage);
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
-				firms.get(i).makePrepare(stage);//every firm make decision for this stage
+				firms.get(cnt).makePrepare(stage);//every firm make decision for this stage
 			}
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
-				firms.get(i).makeDecision();//every firm make decision for this stage
+				firms.get(cnt).makeDecision();//every firm make decision for this stage
 			}
 			this.calculateData();//calculate the results of competition
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//record the results of this stage
 				firms.get(cnt).stageRecord();
 			}
+			System.out.println("one stage end");
 			//end this stage
 		}
 	}
 	
 	
 	public void calculateData(){
-		double hti_E = getExpectation("hti");
-		double exi_E = getExpectation("exi");
-		double price_E = getExpectation("price");
+		double hti_S = getSum("hti");
+		double exi_S = getSum("exi");
+		double price_S = getSum("price");
 		//calculate the brand competitiveness of each firm
 		double hti = 0;
 		double exi = 0;
 		double price = 0;
 		double brandComp = 0;
 		double sumOfComp = 0;
+		double alpha = 0; //another expression of ex_index
 		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate brand competitiveness
 			hti = firms.get(cnt).firmData().getIndex_Ht();
 			exi = firms.get(cnt).firmData().getIndex_Ex();
-			price = firms.get(cnt).firmData().getProd_price();
-			brandComp = 0.2 * Math.pow((hti / hti_E) - 1, 2) 
-					+ 0.5 * (exi / exi_E - 1) 
-					+ 0.3 * (price / price_E - 1);
+			alpha = exi / exi_S;
+			brandComp = 1 - 1 / Math.pow(1.135, hti)*(1 - alpha);
 			firms.get(cnt).firmData().setBrandComp(brandComp);
 			sumOfComp += brandComp;
 		}
 		//calculate saleVolume of the whole market
 		double marketV = market.getCurrentVolume();
-		double sumTechAd = 0;
 		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate the salevolume of each firm
 			double ratio = firms.get(cnt).firmData().getBrandComp() / sumOfComp;
 			//calculate the basic volume according to marketVolume last stage.
 			double sellV = ratio * marketV;
-			//add the effect of tech advance
-			sellV += firms.get(cnt).firmData().getSellVol();
-			sumTechAd += firms.get(cnt).firmData().getSellVol();
 			firms.get(cnt).firmData().setSellVol(sellV);
-			//get the final volume of the market this year.
-			market.finalAnnualVolume(sumTechAd + market.getCurrentVolume());
 		}
 		
 		
 	}
 	
-	public double getExpectation(String index){//calculate the expectations of data
-		double expectation = 0;
+	public double getSum(String index){//calculate the expectations of data
+		double sum = 0;
 		if(index.equals("hti")){
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
-				expectation += firms.get(cnt).firmData().getIndex_Ht();
+				sum += firms.get(cnt).firmData().getIndex_Ht();
 			}
-			expectation /= firms.size();
 		}
 		else if(index.equals("exi")){
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
-				expectation += firms.get(cnt).firmData().getIndex_Ex();
+				sum += firms.get(cnt).firmData().getIndex_Ex();
 			}
-			expectation /= firms.size();
 		}
 		else if(index.equals("price")){
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
-				expectation += firms.get(cnt).firmData().getProd_price();
+				sum += firms.get(cnt).firmData().getProd_price();
 			}
-			expectation /= firms.size();
 		}
-		return expectation;
+		return sum;
 		
 	}
 	public static void main(String[] args) {//main process function
+		
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
-		machine.competitionModeling(2);
+		machine.competitionModeling(5);
+		System.out.println("test end");
+		/*
+		ManuFactory factory = new ManuFactory(0);
+		for(int i =0;i < 10; ++i){
+			factory.stageRenew(i);
+			System.out.print(factory.getProduceTech()+"\n");
+		}
+		*/
 	}
 }

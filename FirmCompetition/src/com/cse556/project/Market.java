@@ -1,8 +1,6 @@
 package com.cse556.project;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Market {
@@ -15,7 +13,7 @@ public class Market {
 	public Market(int stg){
 		currentStage = stg;
 		stableRate = 1.15;
-		basevolume = 50000000;
+		basevolume = 300;
 		annualVolume = new HashMap<Integer, Double>();
 		annualVolume.put(0, basevolume);
 	}
@@ -33,8 +31,4 @@ public class Market {
 		currentVolume = basevolume * Math.pow(stableRate, currentStage);//有问题
 	}
 	
-	public void finalAnnualVolume(double v){
-		currentVolume = v;
-		annualVolume.put(this.currentStage, currentVolume);
-	}
 }
