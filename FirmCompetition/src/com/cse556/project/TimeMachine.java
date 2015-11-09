@@ -118,17 +118,12 @@ public class TimeMachine {
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
 		machine.competitionModeling(5);
-<<<<<<< HEAD
-		
-=======
-		System.out.println("test end");
-
->>>>>>> 9cc34c10b23b16f639d8eb6ce7d1773e74bbce00
-
 */
 		int stage = 5;
 		ManuFactory factory = new ManuFactory(0);
 		factory.makeExcel(stage);
+		Market market = new Market(0);
+		market.makeExcel(stage);
 	}
 
 }

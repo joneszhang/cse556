@@ -43,26 +43,21 @@ public class ManuFactory {
 	}
 
 	public void makeExcel(int stg){
-		String factoryFile = "ManuFactory.xls";//�����excel�ļ���
-		//������
-		String title[]={"Stage","ProduceTechIndex","ProduceCost"};
+		String factoryFile = "ManuFactory.xls";//Excel FileName
+		String title[]={"Stage","ProduceTechIndex","ProduceCost"};//title including parameters
 
-		//����ִ��
+
 		try {
-			//factoryFileΪҪ�½����ļ���
+
 			WritableWorkbook book= Workbook.createWorkbook(new File(factoryFile));
-			//������Ϊ����һҳ���Ĺ���������0��ʾ���ǵ�һҳ
 			WritableSheet sheet=book.createSheet("ManuFactoryData",0);
 
-			ManuFactory factory = new ManuFactory(0);
-
-			//д������
 			for(int i = 0;i <= 2; i++)    //title
 				sheet.addCell(new Label(i,0,title[i]));
 
 			for(int i = 0;i <= stg; i++)    //context
 			{
-				factory.stageRenew(i);
+				this.stageRenew(i);
 				for(int j = 0;j <= 2; j++)
 				{
 					switch (j)
@@ -72,20 +67,20 @@ public class ManuFactory {
 							break;
 
 						case 1:
-							sheet.addCell(new Label(j, i + 1 , Double.toString(factory.getProduceTech())));
+							sheet.addCell(new Label(j, i + 1 , Double.toString(this.getProduceTech())));
 							break;
 
 						case 2:
-							sheet.addCell(new Label(j, i + 1, Double.toString(factory.produceCost(factory.getProduceTech()))));
+							sheet.addCell(new Label(j, i + 1, Double.toString(this.produceCost(this.getProduceTech()))));
 							break;
 					}
 
 				}
 			}
 
-			//д������s
+			//input data
 			book.write();
-			//�ر��ļ�
+			//close file
 			book.close();
 		}
 		catch(Exception e) { }
