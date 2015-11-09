@@ -5,6 +5,11 @@ package com.cse556.project;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
+import java.io.File.*;
+import jxl.*;
+import jxl.biff.DoubleHelper;
+import jxl.write.*;
 
 public class TimeMachine {
 	private int stage = 0;
@@ -108,11 +113,22 @@ public class TimeMachine {
 		
 	}
 	public static void main(String[] args) {//main process function
-		
+
+/*
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
 		machine.competitionModeling(5);
+<<<<<<< HEAD
 		
+=======
+		System.out.println("test end");
 
+>>>>>>> 9cc34c10b23b16f639d8eb6ce7d1773e74bbce00
+
+*/
+		int stage = 5;
+		ManuFactory factory = new ManuFactory(0);
+		factory.makeExcel(stage);
 	}
+
 }

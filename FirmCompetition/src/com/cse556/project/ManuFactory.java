@@ -1,5 +1,12 @@
 package com.cse556.project;
 
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+
+import java.io.File;
+
 public class ManuFactory {
 	private double produceTech;  //the producing tech of the manufacuring companies.
 	private int currentStage;
@@ -33,6 +40,55 @@ public class ManuFactory {
 		currentStage = stg;
 		this.produceTech = p / (1+ Math.pow(c, (a - b*currentStage)));
 		this.baseCost = k / (this.produceTech + d) + e;
+	}
+
+	public void makeExcel(int stg){
+		String factoryFile = "ManuFactory.xls";//�����excel�ļ���
+		//������
+		String title[]={"Stage","ProduceTechIndex","ProduceCost"};
+
+		//����ִ��
+		try {
+			//factoryFileΪҪ�½����ļ���
+			WritableWorkbook book= Workbook.createWorkbook(new File(factoryFile));
+			//������Ϊ����һҳ���Ĺ���������0��ʾ���ǵ�һҳ
+			WritableSheet sheet=book.createSheet("ManuFactoryData",0);
+
+			ManuFactory factory = new ManuFactory(0);
+
+			//д������
+			for(int i = 0;i <= 2; i++)    //title
+				sheet.addCell(new Label(i,0,title[i]));
+
+			for(int i = 0;i <= stg; i++)    //context
+			{
+				factory.stageRenew(i);
+				for(int j = 0;j <= 2; j++)
+				{
+					switch (j)
+					{
+						case 0:
+							sheet.addCell(new Label(j, i + 1 , Integer.toString(i)));
+							break;
+
+						case 1:
+							sheet.addCell(new Label(j, i + 1 , Double.toString(factory.getProduceTech())));
+							break;
+
+						case 2:
+							sheet.addCell(new Label(j, i + 1, Double.toString(factory.produceCost(factory.getProduceTech()))));
+							break;
+					}
+
+				}
+			}
+
+			//д������s
+			book.write();
+			//�ر��ļ�
+			book.close();
+		}
+		catch(Exception e) { }
 	}
 	
 	
