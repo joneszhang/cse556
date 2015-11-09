@@ -112,12 +112,12 @@ public class TimeMachine {
 		machine.initGame();
 		machine.competitionModeling(5);
 		System.out.println("test end");
-		/*
+
 		ManuFactory factory = new ManuFactory(0);
 		for(int i =0;i < 10; ++i){
 			factory.stageRenew(i);
 			System.out.print(factory.getProduceTech()+"\n");
 		}
-		*/
+
 	}
 }
