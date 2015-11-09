@@ -2,7 +2,17 @@ package com.cse556.project;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.Math;
+import java.text.DecimalFormat;
+
+import jxl.*;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 public class Firm {
 	Map<Integer, StageData> annual_Data = null; //list of annual data of this firm
@@ -107,6 +117,42 @@ public class Firm {
 		this.currentData.setExAd(ex_add);
 		annual_Data.put(currentStage, currentData);
 		return true;
+	}
+	
+	public void printToFile(){
+		String title[] = {"stage", "Investment", "Inno_Invest", "Ex_Invest",
+				"Ht_Index", "Ex_Index", "Ht_Add", "Ex_Add", "Compititiveness",
+				"price", "productCost", "sellVolume", "profit"};
+		try{
+			WritableWorkbook book= Workbook.createWorkbook(new File("t.xls"));
+			WritableSheet sheet = book.createSheet("first",0);
+			//write in table
+			for(int i =0;i < title.length; ++i){
+				sheet.addCell(new Label(i,0,title[i]));
+			}
+			for(int j = 0;j < this.annual_Data.size();++j){
+				StageData data = annual_Data.get(j);
+				DecimalFormat df = new DecimalFormat("0.000");
+				sheet.addCell(new Label(0,j+1,String.valueOf(data.getStage())));//stage
+				sheet.addCell(new Label(1,j+1,df.format(data.getInvestment())));//invest
+				sheet.addCell(new Label(2,j+1,df.format(data.getInvest_Inno())));
+				sheet.addCell(new Label(3,j+1,df.format(data.getInvest_Qual())));
+				sheet.addCell(new Label(4,j+1,df.format(data.getIndex_Ht())));
+				sheet.addCell(new Label(5,j+1,df.format(data.getIndex_Ex())));
+				sheet.addCell(new Label(6,j+1,df.format(data.getTechAd())));
+				sheet.addCell(new Label(7,j+1,df.format(data.getExAd())));
+				sheet.addCell(new Label(8,j+1,df.format(data.getBrandComp())));
+				sheet.addCell(new Label(9,j+1,df.format(data.getProd_price())));
+				sheet.addCell(new Label(10,j+1,df.format(data.getProd_cost())));
+				sheet.addCell(new Label(11,j+1,df.format(data.getSellVol())));
+				sheet.addCell(new Label(12,j+1,df.format(data.getProfit())));
+			}
+			book.write();
+			book.close();
+		}catch(Exception e){
+			
+		}
+		
 	}
 	
 }
