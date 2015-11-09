@@ -1,5 +1,12 @@
 package com.cse556.project;
 
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+
+import java.io.File;
+
 public class ManuFactory {
 	private double produceTech;  //the producing tech of the manufacuring companies.
 	private int currentStage;
@@ -33,6 +40,55 @@ public class ManuFactory {
 		currentStage = stg;
 		this.produceTech = p / (1+ Math.pow(c, (a - b*currentStage)));
 		this.baseCost = k / (this.produceTech + d) + e;
+	}
+
+	public void makeExcel(int stg){
+		String factoryFile = "F:\\StudyMaterial\\ASU Master Program\\556\\cse556\\ManuFactory.xls";//输出的excel文件名
+		//标题行
+		String title[]={"Stage","ProduceTechIndex","ProduceCost"};
+
+		//操作执行
+		try {
+			//factoryFile为要新建的文件名
+			WritableWorkbook book= Workbook.createWorkbook(new File(factoryFile));
+			//生成名为“第一页”的工作表，参数0表示这是第一页
+			WritableSheet sheet=book.createSheet("ManuFactoryData",0);
+
+			ManuFactory factory = new ManuFactory(0);
+
+			//写入内容
+			for(int i = 0;i <= 2; i++)    //title
+				sheet.addCell(new Label(i,0,title[i]));
+
+			for(int i = 0;i <= stg; i++)    //context
+			{
+				factory.stageRenew(i);
+				for(int j = 0;j <= 2; j++)
+				{
+					switch (j)
+					{
+						case 0:
+							sheet.addCell(new Label(j, i + 1 , Integer.toString(i)));
+							break;
+
+						case 1:
+							sheet.addCell(new Label(j, i + 1 , Double.toString(factory.getProduceTech())));
+							break;
+
+						case 2:
+							sheet.addCell(new Label(j, i + 1, Double.toString(factory.produceCost(factory.getProduceTech()))));
+							break;
+					}
+
+				}
+			}
+
+			//写入数据s
+			book.write();
+			//关闭文件
+			book.close();
+		}
+		catch(Exception e) { }
 	}
 	
 	
