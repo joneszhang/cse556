@@ -33,6 +33,7 @@ public class ManuFactory {
 		exCost = m * techIndex / this.produceTech;
 		exCost = Math.pow(exCost, 2);
 		double cost = this.baseCost + exCost;
+		System.out.print(this.baseCost+"\n");
 		return cost;
 	}
 	

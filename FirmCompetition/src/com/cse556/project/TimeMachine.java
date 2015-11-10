@@ -24,14 +24,18 @@ public class TimeMachine {
 		firms = new ArrayList<Firm>();
 		firms.add(new Firm("jpelectronic", this));	
 		firms.add(new Firm("tommyinnovation", this));
+		//firms.add(new Firm("zszhang", this));
+		//firms.add(new Firm("haishenglin", this));
 		/*Init the Market*/
 		market = new Market(stage);
 		factory = new ManuFactory(stage);
 	}
 	
 	public void initGame(){
-		firms.get(0).initiate(0, 2, 2, 600);
-		firms.get(1).initiate(0, 2, 2, 600);
+		firms.get(0).initiate(0, 2, 2, 300);
+		firms.get(1).initiate(0, 2, 2, 300);
+		//firms.get(2).initiate(0, 2, 2, 300);
+		//firms.get(3).initiate(0, 2, 2, 300);
 	}
 	
 	public void annualTrade(int stg){
@@ -49,6 +53,8 @@ public class TimeMachine {
 			}
 			firms.get(0).makeDecision(0.1, 0.9);
 			firms.get(1).makeDecision(0.9, 0.1);
+			//firms.get(2).makeDecision(0.5, 0.5);
+			//firms.get(3).makeDecision(0.4, 0.6);
 			this.calculateData();//calculate the results of competition
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//record the results of this stage
 				firms.get(cnt).stageRecord();
@@ -120,7 +126,7 @@ public class TimeMachine {
 
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
-		machine.competitionModeling(10);
+		machine.competitionModeling(20);
 /*
 		int stage = 5;
 		ManuFactory factory = new ManuFactory(0);
