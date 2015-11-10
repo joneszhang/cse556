@@ -16,7 +16,7 @@ public class TimeMachine {
 	private List<Firm> firms = null;
 	public Market market;
 	public ManuFactory factory;
-	
+	//test
 	
 	public TimeMachine(){
 		
@@ -76,10 +76,16 @@ public class TimeMachine {
 		//calculate the brand competitiveness of each firm
 		double hti = 0;
 		double exi = 0;
-		double price = 0;
+		//double price = 0;
+		double price;
 		double brandComp = 0;
 		double sumOfComp = 0;
 		double alpha = 0; //another expression of ex_index
+		double a1 = 1;
+		double a2 = 1;
+		double a3 = 1;
+
+
 		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate brand competitiveness
 			hti = firms.get(cnt).firmData().getIndex_Ht();
 			exi = firms.get(cnt).firmData().getIndex_Ex();
@@ -93,7 +99,8 @@ public class TimeMachine {
 		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate the salevolume of each firm
 			double ratio = firms.get(cnt).firmData().getBrandComp() / sumOfComp;
 			//calculate the basic volume according to marketVolume last stage.
-			double sellV = ratio * marketV;
+			price = firms.get(cnt).firmData().getProd_price();
+			double sellV = a1 * ratio * marketV - a2 * price + a3 * brandComp / price;
 			firms.get(cnt).firmData().setSellVol(sellV);
 		}
 		
