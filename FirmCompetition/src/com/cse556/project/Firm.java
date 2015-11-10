@@ -50,7 +50,8 @@ public class Firm {
 		currentData.setStage(this.currentStage);//set the stage of data
 		
 		//set the investment amount
-		currentData.setInvestment(annual_Data.get(this.currentStage - 1).getProfit());
+		currentData.setInvestment(annual_Data.get(this.currentStage - 1).getProfit()
+				* 0.2);
 		
 		//calculate the progress in tech index and the current index of Tech index
 		double ti = annual_Data.get(currentStage - 1).getTechAd() 
@@ -63,15 +64,15 @@ public class Firm {
 		
 	}
 	
-	public void makeDecision(){// set the data for every stage
+	public void makeDecision(double ratio, double ratio1){// set the data for every stage
 		
 		currentData.setStage(currentStage);
 		
 		double profit_lastyear = currentData.getInvestment();
 		//decide investment on high tech
-		currentData.setInvest_Inno(profit_lastyear * 0.6);
+		currentData.setInvest_Inno(profit_lastyear * ratio);
 		//decide investment on experience
-		currentData.setInvest_Qual(profit_lastyear * 0.4);
+		currentData.setInvest_Qual(profit_lastyear * (ratio1));
 		
 		//calculate the productive cost of this stage
 		currentData.setProd_cost(informer.factory.produceCost(currentData.getIndex_Ht()));
@@ -101,7 +102,7 @@ public class Firm {
 		for(int i = 0;;++i){
 			innov -=
 				this.beta 
-				* Math.pow(this.currentData.getIndex_Ht()+i, 2)
+				* Math.pow(this.currentData.getIndex_Ht()+ti_add, 2)
 				/ 2;
 			if(innov>=0)
 				ti_add += 1;
@@ -110,10 +111,24 @@ public class Firm {
 		}
 		this.currentData.setTechAd(ti_add);
 		//record the advance in experience
-		double ex_add = this.currentData.getIndex_Ex()
-				/ (this.beta 
-						* Math.pow(this.currentData.getIndex_Ex(), 2)
+		double ex = this.currentData.getInvest_Qual();
+		double ex_add = 0;
+		for(int i = 0;;++i){
+			if(ex > this.beta 
+					* Math.pow(this.currentData.getIndex_Ex() + ex_add, 2)
+					/ 2){
+				ex_add += 1;
+				ex -= this.beta 
+						* Math.pow(this.currentData.getIndex_Ex() + ex_add, 2)
+						/ 2;
+			}else{
+				ex_add += ex /( this.beta 
+						* Math.pow(this.currentData.getIndex_Ex()+ex_add, 2)
 						/ 2);
+				break;
+			}
+			
+		}
 		this.currentData.setExAd(ex_add);
 		annual_Data.put(currentStage, currentData);
 		return true;
@@ -124,7 +139,7 @@ public class Firm {
 				"Ht_Index", "Ex_Index", "Ht_Add", "Ex_Add", "Compititiveness",
 				"price", "productCost", "sellVolume", "profit"};
 		try{
-			WritableWorkbook book= Workbook.createWorkbook(new File("t.xls"));
+			WritableWorkbook book= Workbook.createWorkbook(new File(this.firmName+".xls"));
 			WritableSheet sheet = book.createSheet("first",0);
 			//write in table
 			for(int i =0;i < title.length; ++i){

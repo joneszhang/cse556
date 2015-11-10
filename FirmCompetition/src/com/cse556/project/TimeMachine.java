@@ -30,8 +30,8 @@ public class TimeMachine {
 	}
 	
 	public void initGame(){
-		firms.get(0).initiate(0, 3, 2, 20);
-		firms.get(1).initiate(0, 2, 2, 20);
+		firms.get(0).initiate(0, 2, 2, 600);
+		firms.get(1).initiate(0, 2, 2, 600);
 	}
 	
 	public void annualTrade(int stg){
@@ -47,17 +47,19 @@ public class TimeMachine {
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
 				firms.get(cnt).makePrepare(stage);//every firm make decision for this stage
 			}
-			for(int cnt = 0;cnt < firms.size(); ++cnt){
-				firms.get(cnt).makeDecision();//every firm make decision for this stage
-			}
+			firms.get(0).makeDecision(0.1, 0.9);
+			firms.get(1).makeDecision(0.9, 0.1);
 			this.calculateData();//calculate the results of competition
 			for(int cnt = 0;cnt < firms.size(); ++cnt){//record the results of this stage
 				firms.get(cnt).stageRecord();
+				firms.get(cnt).printToFile();
 			}
-			System.out.println("one stage end");
 			//end this stage
 		}
-		firms.get(0).printToFile();
+		for(int cnt = 0;cnt < firms.size(); ++cnt){//record the results of this stage
+			firms.get(cnt).printToFile();
+		}
+		
 	}
 	
 	
@@ -76,7 +78,7 @@ public class TimeMachine {
 			hti = firms.get(cnt).firmData().getIndex_Ht();
 			exi = firms.get(cnt).firmData().getIndex_Ex();
 			alpha = exi / exi_S;
-			brandComp = 1 - 1 / Math.pow(1.135, hti)*(1 - alpha);
+			brandComp = 1 - 1 / Math.pow(1.025, hti)*(1 - 0.9*alpha);//get brand competitiveness
 			firms.get(cnt).firmData().setBrandComp(brandComp);
 			sumOfComp += brandComp;
 		}
@@ -112,18 +114,20 @@ public class TimeMachine {
 		return sum;
 		
 	}
+	
 	public static void main(String[] args) {//main process function
 
-/*
+
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
-		machine.competitionModeling(5);
-*/
+		machine.competitionModeling(10);
+/*
 		int stage = 5;
 		ManuFactory factory = new ManuFactory(0);
 		factory.makeExcel(stage);
 		Market market = new Market(0);
 		market.makeExcel(stage);
+		*/
 	}
 
 }

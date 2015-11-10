@@ -19,7 +19,7 @@ public class Market {
 	public Market(int stg){
 		currentStage = stg;
 		stableRate = 1.15;
-		basevolume = 300;
+		basevolume = 30;
 		annualVolume = new HashMap<Integer, Double>();
 		annualVolume.put(0, basevolume);
 	}
