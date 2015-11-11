@@ -51,8 +51,8 @@ public class TimeMachine {
 			for(int cnt = 0;cnt < firms.size(); ++cnt){
 				firms.get(cnt).makePrepare(stage);//every firm make decision for this stage
 			}
-			firms.get(0).makeDecision(0.1, 0.9);
-			firms.get(1).makeDecision(0.9, 0.1);
+			firms.get(0).makeDecision(0.3, 0.7);
+			firms.get(1).makeDecision(0.7, 0.3);
 			//firms.get(2).makeDecision(0.5, 0.5);
 			//firms.get(3).makeDecision(0.4, 0.6);
 			this.calculateData();//calculate the results of competition
@@ -82,8 +82,8 @@ public class TimeMachine {
 		double sumOfComp = 0;
 		double alpha = 0; //another expression of ex_index
 		double a1 = 1;
-		double a2 = 1;
-		double a3 = 1;
+		double a2 = 0.01;
+		double a3 = 2000;
 
 
 		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate brand competitiveness
@@ -99,8 +99,20 @@ public class TimeMachine {
 		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate the salevolume of each firm
 			double ratio = firms.get(cnt).firmData().getBrandComp() / sumOfComp;
 			//calculate the basic volume according to marketVolume last stage.
-			price = firms.get(cnt).firmData().getProd_price();
-			double sellV = a1 * ratio * marketV - a2 * price + a3 * brandComp / price;
+			//price = firms.get(cnt).firmData().getProd_price();
+			//double sellV = ratio * marketV;
+			double a = -2 * a2;
+			double b1 = ratio * marketV;
+			double d = -a2 * firms.get(cnt).firmData().getProd_cost();
+
+			//sellVol =  ratio * marketV - a2 * price;
+			//因为profit = sellVol*(price - produceCost),对price求导：使profit最大化，就会得出这个公式
+			price = (ratio * marketV + a2 * firms.get(cnt).firmData().getProd_cost()) / (2 * a2);
+			//price = (-b1/(3*a)) + (1/(3*a*Math.pow(2, 1/3)))*Math.pow((-2*b1*b1*b1-27*a*a*d + Math.pow(-4*Math.pow(b1,6) + Math.pow(-2*b1*b1*b1-27*a*a*d, 2),1/2)), 1/3)-(b1*b1)*Math.pow(2, 1/3)/(3*a*Math.pow(-2*b1*b1*b1-27*a*a*d + Math.pow(-4*Math.pow(b1,6) + Math.pow(-2*b1*b1*b1-27*a*a*d, 2),1/2), 1/3));
+			firms.get(cnt).firmData().setProd_price(price);
+
+			//double sellV = a1 * ratio * marketV - a2 * price + a3 * brandComp / price;
+			double sellV = a1 * ratio * marketV - a2 * price;
 			firms.get(cnt).firmData().setSellVol(sellV);
 		}
 		
@@ -131,16 +143,20 @@ public class TimeMachine {
 	public static void main(String[] args) {//main process function
 
 
+		int stage = 10;
 		TimeMachine machine = new TimeMachine();
 		machine.initGame();
-		machine.competitionModeling(20);
-/*
-		int stage = 5;
+		machine.competitionModeling(stage);
+
+
+		/*
+		int stage = 30;
 		ManuFactory factory = new ManuFactory(0);
 		factory.makeExcel(stage);
 		Market market = new Market(0);
 		market.makeExcel(stage);
 		*/
+
 	}
 
 }

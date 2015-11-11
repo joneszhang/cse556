@@ -78,7 +78,7 @@ public class Firm {
 		currentData.setProd_cost(informer.factory.produceCost(currentData.getIndex_Ht()));
 		
 		//decide the price of this stage.
-				currentData.setProd_price(currentData.getProd_cost() * 1.5);
+				//currentData.setProd_price(currentData.getProd_cost() * 1.5);
 		
 		//calculate the increase in sell volume due to dech increase
 		//double addsell = (currentStage > 0)?informer.market.getCurrentVolume() * 0.005 
