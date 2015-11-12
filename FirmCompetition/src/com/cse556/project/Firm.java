@@ -57,6 +57,7 @@ public class Firm {
 		double ti = annual_Data.get(currentStage - 1).getTechAd() 
 				+ annual_Data.get(this.currentStage - 1).getIndex_Ht();
 		currentData.setIndex_Ht(ti);
+
 		//calculate experience index
 		double ex = annual_Data.get(currentStage - 1).getExAd() 
 				+ annual_Data.get(this.currentStage - 1).getIndex_Ex();
@@ -69,6 +70,7 @@ public class Firm {
 		currentData.setStage(currentStage);
 		
 		double profit_lastyear = currentData.getInvestment();
+
 		//decide investment on high tech
 		currentData.setInvest_Inno(profit_lastyear * ratio);
 		//decide investment on experience

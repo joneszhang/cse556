@@ -18,7 +18,7 @@ public class ManuFactory {
 	private double c = 1.5;
 	private double a = 8;
 	private double b = 0.4;
-	private double m = 2.5;
+	private double m = 2;
 	private double e = 100;
 	
 	public ManuFactory(int stg){
