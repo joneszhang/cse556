@@ -20,6 +20,8 @@ public class StageData{
 	private int stage = 0;
 	private String firmName = null;
 	
+	private double totalAssets = 0;
+	
 	public void resetData(){
 		this.invest_Inno = 0;
 		this.invest_Qual = 0;
@@ -50,7 +52,15 @@ public class StageData{
 	public double getExAd() {
 		return exAd;
 	}
+	
+	
+	public double getTotalAssets() {
+		return totalAssets;
+	}
 
+	public void setTotalAssets(double totalAssets) {
+		this.totalAssets = totalAssets;
+	}
 
 	public void setExAd(double exAd) {
 		this.exAd = exAd;

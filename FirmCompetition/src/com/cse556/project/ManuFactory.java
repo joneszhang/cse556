@@ -17,23 +17,23 @@ public class ManuFactory {
 	private double p = 100;
 	private double c = 1.5;
 	private double a = 8;
-	private double b = 0.4;
-	private double m = 2;
+	private double b = 0.2;
+	private double m = 5;
 	private double e = 100;
 	
 	public ManuFactory(int stg){
 		currentStage = stg;
-		baseCost = 5000;
+		baseCost = 0;
 		produceTech = 6;
 	}
 	
 	
 	public double produceCost(double techIndex){//calculate the costs
 		double exCost = 0;
-		exCost = m * techIndex / this.produceTech;
-		exCost = Math.pow(exCost, 2);
-		double cost = this.baseCost + exCost;
-		//System.out.print(this.baseCost+"\n");
+
+		exCost = (techIndex / this.produceTech);
+		double cost = exCost < 1 ? this.baseCost + Math.log(-exCost+2) : this.baseCost+Math.pow(m*exCost, 2);
+		//System.out.print(cost+" "+exCost+"\n");
 		return cost;
 	}
 	

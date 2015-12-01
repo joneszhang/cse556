@@ -18,7 +18,7 @@ public class Market {
 	
 	public Market(int stg){
 		currentStage = stg;
-		stableRate = 1.15;
+		stableRate = 1.0;
 		basevolume = 30;
 		annualVolume = new HashMap<Integer, Double>();
 		annualVolume.put(0, basevolume);
@@ -32,6 +32,9 @@ public class Market {
 		return this.currentVolume;
 	}
 	
+	public double getStageVolume(int stg){
+		return basevolume * Math.pow(stableRate, stg);
+	}
 	public void naturalIncrease(int stg){
 		currentStage = stg;
 		currentVolume = basevolume * Math.pow(stableRate, currentStage);//有问题
