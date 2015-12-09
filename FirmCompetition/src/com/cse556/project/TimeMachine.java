@@ -33,8 +33,8 @@ public class TimeMachine {
 	}
 	
 	public void initGame(){
-		firms.get(0).initiate(0, 2, 2, 50);
-		firms.get(1).initiate(0, 2, 2, 50);
+		firms.get(0).initiate(0, 20, 20, 50);
+		firms.get(1).initiate(0, 8, 2, 50);
 		firms.get(2).initiate(0, 2, 2, 50);
 		//firms.get(3).initiate(0, 2, 2, 300);
 	}
@@ -169,8 +169,24 @@ public class TimeMachine {
 			if(c >= p0)
 			{
 				//System.out.println(4*aa*(aa*(p0-c)*(p0-c)-3));
-				price = (2*p0 + c + Math.pow((p0-c)*(p0-c) - 3*ratio*marketV / aa, 0.5))/(3);
-				sellV = marketV*ratio + (aa*Math.pow(price-p0, 2)+1);
+				double p1, p2;
+				double s1, s2;
+				if(marketV*ratio + (aa*Math.pow(c-p0, 2)) <= 0.5){
+					sellV = marketV * 0.1 * ratio;
+					System.out.println(ratio);
+					price = c * 1.5;
+				}
+				else{
+				p1 = (2*p0 + c + Math.pow((p0-c)*(p0-c) - 3*ratio*marketV / aa, 0.5))/(3);
+				p2 = (2*p0 + c - Math.pow((p0-c)*(p0-c) - 3*ratio*marketV / aa, 0.5))/(3);
+				s1 = marketV*ratio + (aa*Math.pow(p1-p0, 2));
+				s2 = marketV*ratio + (aa*Math.pow(p2-p0, 2));
+				double pro1 = s1*p1;
+				double pro2 = s2*p2;
+				sellV = (pro1>pro2)?s1:s2;
+				price = (pro1>pro2)?p1:p2;
+				}
+				
 			}
 			else if(c < p0)
 			{
@@ -194,7 +210,7 @@ public class TimeMachine {
 				//price = (s1*(p1-c) < s2*(p2-c)) ? p2 : p1;
 				sellV = s[mark];
 				price = p[mark];
-				System.out.println(p0 +":::::"+price);
+				//System.out.println("firm"+cnt+"::"+p0 +":::::"+price);
 			}
 			
 			firms.get(cnt).firmData().setProd_price(price);
