@@ -4,6 +4,7 @@
 package com.cse556.project;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.io.*;
 import java.io.File.*;
@@ -24,7 +25,7 @@ public class TimeMachine {
 		firms = new ArrayList<Firm>();
 		firms.add(new Firm("jpelectronic", this));	
 		firms.add(new Firm("tommyinnovation", this));
-		//firms.add(new Firm("zszhang", this));
+		firms.add(new Firm("zszhang", this));
 		//firms.add(new Firm("haishenglin", this));
 		/*Init the Market*/
 		market = new Market(stage);
@@ -32,9 +33,9 @@ public class TimeMachine {
 	}
 	
 	public void initGame(){
-		firms.get(0).initiate(0, 2, 5, 50);
-		firms.get(1).initiate(0, 5, 2, 50);
-		//firms.get(2).initiate(0, 2, 2, 300);
+		firms.get(0).initiate(0, 2, 2, 50);
+		firms.get(1).initiate(0, 2, 2, 50);
+		firms.get(2).initiate(0, 2, 2, 50);
 		//firms.get(3).initiate(0, 2, 2, 300);
 	}
 	
@@ -42,7 +43,8 @@ public class TimeMachine {
 		
 	}
 	
-	public void competitionModeling(int stageNumber){
+	public void competitionModeling(int stageNumber)
+	{
 		for(int i = 0; i < stageNumber; ++i)
 		{
 			stage = i;
@@ -59,7 +61,8 @@ public class TimeMachine {
 			//double r1 = innopair[0] / firms.get(0).firmData().getInvestment();
 			//double r2 = innopair[1] / firms.get(0).firmData().getInvestment();
 			firms.get(0).makeDecision(0.4, 0.5, 0.5);
-			firms.get(1).makeDecision(0.4, 0, 1);
+			firms.get(1).makeDecision(0.4, 0.1, 0.9);
+			firms.get(2).makeDecision(0.4, 1, 0);
 
 			this.calculateData();//calculate the results of competition
 			for(int cnt = 0;cnt < firms.size(); ++cnt) 
@@ -69,10 +72,10 @@ public class TimeMachine {
 			}
 			//end this stage
 		}
-
 	}
 	
-	public double[] NeTest(){
+	public double[] NeTest()
+	{
 		factory.stageRenew(stage + 1);
 		double mta1 = firms.get(0).add_max() + 1;
 		double mta2 = firms.get(1).add_max() + 1;
@@ -129,53 +132,106 @@ public class TimeMachine {
 		return result;
 	}
 	
-	public void calculateData(){
+	public void calculateData()
+	{
 		double exi_S = getSum("exi");
 		//calculate the brand competitiveness of each firm
 		double hti = 0;
 		double exi = 0;
-		//double price = 0;
-		double price;
+		double price = 0;
+		double sellV = 0;
 		double brandComp = 0;
 		double sumOfComp = 0;
 		double alpha = 0; //another expression of ex_index
-		double a1 = 1;
-		double a2 = 0.02;
+		//double a1 = 1;
+		//double a2 = 0.02;
+		double a = 0.1;
+		double aa = -0.01;
+		double p0;
 
-		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate brand competitiveness
+		for(int cnt = 0;cnt < firms.size(); ++cnt)
+		{//calculate brand competitiveness
 			hti = firms.get(cnt).firmData().getIndex_Ht();
 			exi = firms.get(cnt).firmData().getIndex_Ex();
 			alpha = exi / exi_S;
 			brandComp = 1 - 1 / Math.pow(1.025, hti)*(1 - 0.9*alpha);//get brand competitiveness
+			brandComp = Math.pow(brandComp * 10, 2);
 			firms.get(cnt).firmData().setBrandComp(brandComp);
 			sumOfComp += brandComp;
 		}
 		//calculate saleVolume of the whole market
 		double marketV = market.getCurrentVolume();
-		for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate the sales volume of each firm
+		for(int cnt = 0;cnt < firms.size(); ++cnt)
+		{//calculate the sales volume of each firm
+			double c = firms.get(cnt).firmData().getProd_cost();
 			double ratio = firms.get(cnt).firmData().getBrandComp() / sumOfComp;
-
-			//double a = -2 * a2;
-			//double b1 = ratio * marketV;
-			//double d = -a2 * firms.get(cnt).firmData().getProd_cost();
-
-			price = (ratio*marketV + a2*firms.get(cnt).firmData().getProd_cost()) / (2 * a2);
+			p0 = getPriceMedian();
+			if(c >= p0)
+			{
+				//System.out.println(4*aa*(aa*(p0-c)*(p0-c)-3));
+				price = (2*p0 + c + Math.pow((p0-c)*(p0-c) - 3*ratio*marketV / aa, 0.5))/(3);
+				sellV = marketV*ratio + (aa*Math.pow(price-p0, 2)+1);
+			}
+			else if(c < p0)
+			{
+				double p[] = {0,0,0};
+				double s[] = {0,0,0};
+				double pro[] = {0,0,0};
+				p[0] = (a*p0+1+a*c)/(2*a);
+				if(p[0] > p0) p[0] = p0;
+				p[1] = (2*p0 + c + Math.pow((p0-c)*(p0-c) - 3*ratio*marketV / aa, 0.5))/(3);
+				p[2] = (2*p0 + c - Math.pow((p0-c)*(p0-c) - 3*ratio*marketV / aa, 0.5))/(3);
+				s[0] = marketV*ratio*(a*(p0-p[0])+1);
+				s[1] = marketV*ratio + aa*Math.pow(p[1]-p0, 2);
+				s[2] = marketV*ratio + aa*Math.pow(p[2]-p0, 2);
+				pro[0] = s[0]*(p[0]-c);
+				pro[1] = s[1]*(p[1]-c);
+				pro[2] = s[2]*(p[2]-c);
+				int mark = 0;
+				if(pro[mark] < pro[1]) mark = 1;
+				if(pro[mark] < pro[2]) mark = 2;
+				//sellV = (s1*(p1-c) < s2*(p2-c)) ? s2 : s1;
+				//price = (s1*(p1-c) < s2*(p2-c)) ? p2 : p1;
+				sellV = s[mark];
+				price = p[mark];
+				System.out.println(p0 +":::::"+price);
+			}
+			
 			firms.get(cnt).firmData().setProd_price(price);
-
-			double sellV = a1 * ratio * marketV - a2 * price;
 			firms.get(cnt).firmData().setSellVol(sellV);
 		}
 	}
 	
-	public double getSum(String index){//calculate the expectations of data
+	public double getPriceMedian()
+	{
+		double[] arr= new double[firms.size()];
+		
+		for(int cnt = 0; cnt < firms.size(); ++cnt)
+		{
+			if(stage == 0)
+				arr[cnt] = firms.get(cnt).firmData().getProd_cost();
+			else
+				arr[cnt] = firms.get(cnt).annual_Data.get(stage - 1).getProd_price();
+		}
+		Arrays.sort(arr);
+		
+		return firms.size()%2 == 0 ? (arr[(firms.size()/2)-1] + arr[firms.size()/2])/2: arr[firms.size()/2];
+	}
+	
+	public double getSum(String index)
+	{//calculate the expectations of data
 		double sum = 0;
-		if(index.equals("hti")){
-			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
+		if(index.equals("hti"))
+		{
+			for(int cnt = 0;cnt < firms.size(); ++cnt)
+			{//calculate expectation of tech index
 				sum += firms.get(cnt).firmData().getIndex_Ht();
 			}
 		}
-		else if(index.equals("exi")){
-			for(int cnt = 0;cnt < firms.size(); ++cnt){//calculate expectation of tech index
+		else if(index.equals("exi"))
+		{
+			for(int cnt = 0;cnt < firms.size(); ++cnt)
+			{//calculate expectation of tech index
 				sum += firms.get(cnt).firmData().getIndex_Ex();
 			}
 		}

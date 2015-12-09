@@ -147,7 +147,8 @@ public class Firm {
 		annual_Data.put(currentStage, currentData);
 		return true;
 	}
-	public double add_max(){
+	public double add_max()
+	{
 		double innov = this.currentData.getInvestment();
 		double ti_add=0;
 		for(int i = 0;;++i){
@@ -162,9 +163,11 @@ public class Firm {
 		}
 		return ti_add;
 	}
-	double calInnoV(double hti_add){
+	double calInnoV(double hti_add)
+	{
 		double innov = 0;
-		for(int i = 0;i < hti_add; ++i){
+		for(int i = 0;i < hti_add; ++i)
+		{
 			innov += this.beta 
 					* Math.pow(this.currentData.getIndex_Ht()+i, 2)
 					/ 2;
@@ -207,10 +210,12 @@ public class Firm {
 			WritableWorkbook book= Workbook.createWorkbook(new File(this.firmName+".xls"));
 			WritableSheet sheet = book.createSheet("first",0);
 			//write in table
-			for(int i =0;i < title.length; ++i){
+			for(int i =0;i < title.length; ++i)
+			{
 				sheet.addCell(new Label(i,0,title[i]));
 			}
-			for(int j = 0;j < this.annual_Data.size();++j){
+			for(int j = 0;j < this.annual_Data.size();++j)
+			{
 				StageData data = annual_Data.get(j);
 				DecimalFormat df = new DecimalFormat("0.000");
 				sheet.addCell(new Label(0,j+1,String.valueOf(data.getStage())));//stage
